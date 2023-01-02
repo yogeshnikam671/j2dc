@@ -4,21 +4,21 @@ const object = {
   a: 2,
   b: "hello",
   c: true,
-  d: ["something"],
+  d: ["something", "else"],
   e: { }
 };
 
 const createDataClassFrom = (object) => {
-  let str = "data class J2DC(\n";
+  let res = "data class J2DC(\n";
   
   Object.keys(object).forEach(key => {
     const type = kotlinTypeOf(object[key]);
-    str = str + `\tval ${key}: ${type}?,\n`;
+    res = res + `\tval ${key}: ${type}?,\n`;
   });
 
-  str = str + ")";
-  console.log(str);
-  pbcopy(str);
+  res = res + ")";
+  console.log(res);
+  pbcopy(res);
 }
 
 const kotlinTypeOf = (value) => {
@@ -33,10 +33,20 @@ const kotlinTypeOf = (value) => {
 
 const kotlinTypeOfObject = (object) => {
   if(object.length === undefined) return "Any";
-  if(object.length > 0) {
+  if(object.length > 0 && isSameTypeArray(object)) {
     return `List<${kotlinTypeOf(object[0])}?>`;
   } 
   return "List<Any?>";
+}
+
+const isSameTypeArray = (array) => {
+  const typeArray = array.map(elem => typeof elem);
+  
+  const initialType = typeArray[0];
+  let res = true;
+  
+  typeArray.forEach(type => { if(type !== initialType) res = false; });
+  return res;
 }
 
 const pbcopy = (data) => {
