@@ -1,0 +1,17 @@
+{
+  "name": "j2dc",
+  "version": "1.0.0",
+  "description": "Utility to convert json object to a kotlin data class",
+  "main": "index.js",
+  "bin": {
+    "j2dc": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Yogesh Nikam",
+  "license": "ISC",
+  "dependencies": {
+    "copy-paste": "^1.3.0"
+  }
+}

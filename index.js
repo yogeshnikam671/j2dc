@@ -1,11 +1,13 @@
 #!/usr/bin/env /usr/local/bin/node
 
+const cp = require("copy-paste");
+
 const obj = {
-  a: 2,
-  b: "hello",
-  c: true,
-  d: ["something", "else"],
-  e: { }
+  "a": 2,
+  "b": "hello",
+  "c": true,
+  "d": ["something", "else"],
+  "e": { }
 };
 
 const object1 = "non"
@@ -13,7 +15,7 @@ const object1 = "non"
 const createDataClassFrom = (object) => {
   if(!isObject(object)) {
     console.log("Invalid JSON object");
-    pbcopy("Invalid JSON object");
+    cp.copy("Invalid JSON object");
     return;
   }
   let res = "data class J2DC(\n";
@@ -23,9 +25,9 @@ const createDataClassFrom = (object) => {
     res = res + `\tval ${key}: ${type}?,\n`;
   });
 
-  res = res + ")";
+  res = res + ")\n";
   console.log(res);
-  pbcopy(res);
+  cp.copy(res);
 }
 
 const kotlinTypeOf = (value) => {
@@ -60,13 +62,26 @@ const isSameTypeArray = (array) => {
   return res;
 }
 
-const pbcopy = (data) => {
-  var proc = require('child_process').spawn('pbcopy'); 
-  proc.stdin.write(data); proc.stdin.end();
-}
-
 const isObject = object => {
     return typeof object === 'object' && object !== null && !Array.isArray(object);
 }
 
-createDataClassFrom(obj);
+
+const execute = () => {
+  if (process.argv.length === 2) {
+    try {
+      const copiedContent = JSON.parse(cp.paste());
+      createDataClassFrom(copiedContent);
+    } catch (e) {
+      console.log("Invalid JSON data");
+    }
+  } else if(process.argv[2]) {
+    switch(process.argv[2]) {
+      case '-i' : createDataClassFrom(obj); break;
+      default: console.log("Invalid flag"); 
+    }
+  }
+}
+
+
+execute();
