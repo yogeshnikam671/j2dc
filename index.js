@@ -97,6 +97,17 @@ const isSameTypeArray = (array) => {
   const initialType = typeArray[0];
   let res = true;
   typeArray.forEach(type => { if(type !== initialType) res = false; });
+  
+  // check the structure of objects if it is an array containing objects
+  if(res && initialType === "object") {
+   const initialKeys = Object.keys(array[0]);
+   array.forEach(elem => {
+      const currKeys = Object.keys(elem);
+      if(initialKeys.length !== currKeys.length) res = false;
+      else if(!initialKeys.every((val,idx) => val === currKeys[idx])) res = false;
+   });   
+  }
+
   return res;
 }
 
