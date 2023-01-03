@@ -15,13 +15,14 @@ const obj = {
     "g1": { "random": 10 },
     "g2": {
         "g3": {
-            "g4": [],
+            "g4": [{ "h": "h1" }, { "h": "h2" }],
             "g5": {
                 "g6": 10
              }
          }
      }
-   }
+   },
+  "dynamicFieldsJson": [ { "checkListId": "1000001", "submitVal": "Resolved"}]
 };
 
 const obj1 = "non"
@@ -50,9 +51,9 @@ const createDataClassFrom = (object, res, subTypeMap) => {
   }
 
   Object.keys(object).forEach(key => {
-    const type = kotlinTypeOf(object[key], key);
+    const type = kotlinTypeOf(object[key], key, subTypeMap);
     res = res + `\tval ${key}: ${type}?,\n`;
-    addSubTypeDetails(subTypeMap, object, key, type);
+    //addSubTypeDetails(subTypeMap, object, key, type);
   });
 
   res = res + ")\n";
@@ -65,27 +66,28 @@ const addSubTypeDetails = (subTypeMap, object, key, type) => {
   }
 }
 
-const kotlinTypeOf = (value, key) => {
+const kotlinTypeOf = (value, key, subTypeMap) => {
   switch(typeof value) {
     case "number": return "Int";
     case "string": return "String";
     case "boolean": return "Boolean";
     case "object": {
-      if(isObject(value)) return kotlinTypeOfObject(value, key);
-      else return kotlinTypeOfArray(value);
+      if(isObject(value)) return kotlinTypeOfObject(value, key, subTypeMap);
+      else return kotlinTypeOfArray(value, key, subTypeMap);
     }; 
     default: return "Any";
   }
 } 
 
-const kotlinTypeOfObject = (object, key) => {
+const kotlinTypeOfObject = (object, key, subTypeMap) => {
   if(Object.keys(object).length === 0) return "Any";
+  subTypeMap[key] = object;
   return key; // TODO - make this a normal first character capital and other characters small word
 }
 
-const kotlinTypeOfArray = (array) => {
+const kotlinTypeOfArray = (array, key, subTypeMap) => {
   if(array.length > 0 && isSameTypeArray(array)) {
-    return `List<${kotlinTypeOf(array[0])}?>`;
+    return `List<${kotlinTypeOf(array[0], key, subTypeMap)}?>`;
   } 
   return "List<Any?>";
 }
