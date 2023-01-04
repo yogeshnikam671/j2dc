@@ -1,31 +1,8 @@
 #!/usr/bin/env /usr/local/bin/node
 
+const { obj, obj1 } = require("./test-data.js"); // TODO - Remove this dependency once the tool is properly tested
+const { isSameTypeArray, isObject, toNormalCase } = require("./utils.js");
 const cp = require("copy-paste");
-
-const obj = {
-  "a": 2,
-  "b": "hello",
-  "c": true,
-  "d": ["something", "else"],
-  "e": { },
-  "f": {
-    "f1": "hello",
-   },
-  "g": {
-    "g1": { "random": 10 },
-    "g2": {
-        "g3": {
-            "g4": [{ "h": "h1" }, { "h": "h2" }],
-            "g5": {
-                "g6": 10
-             }
-         }
-     }
-   },
-  "dynamicFieldsJson": [ { "checkListId": "1000001", "submitVal": "Resolved"}]
-};
-
-const obj1 = "non"
 
 const createDataClassFromHelper = (object) => {
   let res = "data class J2DC(\n";
@@ -86,43 +63,17 @@ const kotlinTypeOfArray = (array, key, subTypeMap) => {
   return "List<Any?>";
 }
 
-const isSameTypeArray = (array) => {
-  const typeArray = array.map(elem => typeof elem);
-  const initialType = typeArray[0];
-  let res = true;
-  typeArray.forEach(type => { if(type !== initialType) res = false; });
-  
-  // check the structure of objects if it is an array containing objects
-  if(res && initialType === "object") {
-   const initialKeys = Object.keys(array[0]);
-   array.forEach(elem => {
-      const currKeys = Object.keys(elem);
-      if(initialKeys.length !== currKeys.length) res = false;
-      else if(!initialKeys.every((val,idx) => val === currKeys[idx])) res = false;
-   });   
-  }
-
-  return res;
-}
-
-const isObject = object => {
-    return typeof object === 'object' && object !== null && !Array.isArray(object);
-}
-
-const toNormalCase = value => {
-  const firstChar = value[0].toUpperCase();
-  const otherChars = value.slice(1, value.length);
-  return firstChar + otherChars;
+const executeDefault = () => {
+   try {
+      createDataClassFromHelper(JSON.parse(cp.paste()));
+    } catch (e) {
+      console.log("Invalid JSON data");
+    }
 }
 
 const execute = () => {
   if (process.argv.length === 2) {
-    try {
-      const copiedContent = JSON.parse(cp.paste());
-      createDataClassFromHelper(copiedContent);
-    } catch (e) {
-      console.log("Invalid JSON data");
-    }
+    executeDefault();
   } else if(process.argv[2]) {
     switch(process.argv[2]) {
       case '-i' : createDataClassFromHelper(obj); break;
