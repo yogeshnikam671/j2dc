@@ -53,17 +53,10 @@ const createDataClassFrom = (object, res, subTypeMap) => {
   Object.keys(object).forEach(key => {
     const type = kotlinTypeOf(object[key], key, subTypeMap);
     res = res + `\tval ${key}: ${type}?,\n`;
-    //addSubTypeDetails(subTypeMap, object, key, type);
   });
 
   res = res + ")\n";
   return res;
-}
-
-const addSubTypeDetails = (subTypeMap, object, key, type) => {
-  if(type.toLowerCase() === key.toLowerCase()) {
-    subTypeMap[type] = object[key];
-  }
 }
 
 const kotlinTypeOf = (value, key, subTypeMap) => {
@@ -81,8 +74,9 @@ const kotlinTypeOf = (value, key, subTypeMap) => {
 
 const kotlinTypeOfObject = (object, key, subTypeMap) => {
   if(Object.keys(object).length === 0) return "Any";
-  subTypeMap[key] = object;
-  return key; // TODO - make this a normal first character capital and other characters small word
+  const type = toNormalCase(key);
+  subTypeMap[type] = object;
+  return type;
 }
 
 const kotlinTypeOfArray = (array, key, subTypeMap) => {
@@ -115,6 +109,11 @@ const isObject = object => {
     return typeof object === 'object' && object !== null && !Array.isArray(object);
 }
 
+const toNormalCase = value => {
+  const firstChar = value[0].toUpperCase();
+  const otherChars = value.slice(1, value.length);
+  return firstChar + otherChars;
+}
 
 const execute = () => {
   if (process.argv.length === 2) {
