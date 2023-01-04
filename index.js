@@ -5,6 +5,8 @@ const { isSameTypeArray, isObject, toNormalCase, jsonParse } = require("./utils.
 const cp = require("copy-paste");
 const fs = require("fs");
 
+const nullFlagCharacter = process.argv.includes('-n') ? "" : "?";
+
 const createDataClassFromHelper = (object) => {
   let res = "data class J2DC(\n";
   const subTypeMap = {};
@@ -30,7 +32,7 @@ const createDataClassFrom = (object, res, subTypeMap) => {
 
   Object.keys(object).forEach(key => {
     const type = kotlinTypeOf(object[key], key, subTypeMap);
-    res = res + `\tval ${key}: ${type}?,\n`;
+    res = res + `\tval ${key}: ${type}${nullFlagCharacter},\n`;
   });
 
   res = res + ")\n";
@@ -63,9 +65,9 @@ const insertSubType = (type, object, subTypeMap) => {
 
 const kotlinTypeOfArray = (array, key, subTypeMap) => {
   if(array.length > 0 && isSameTypeArray(array)) {
-    return `List<${kotlinTypeOf(array[0], key, subTypeMap)}?>`;
+    return `List<${kotlinTypeOf(array[0], key, subTypeMap)}${nullFlagCharacter}>`;
   } 
-  return "List<Any?>";
+  return `List<Any${nullFlagCharacter}>`;
 }
 
 const executeDefaultFlow = () => {
