@@ -1,8 +1,9 @@
 #!/usr/bin/env /usr/local/bin/node
 
 const { obj, obj1 } = require("./test-data.js"); // TODO - Remove this dependency once the tool is properly tested
-const { isSameTypeArray, isObject, toNormalCase } = require("./utils.js");
+const { isSameTypeArray, isObject, toNormalCase, jsonParse } = require("./utils.js");
 const cp = require("copy-paste");
+const fs = require("fs");
 
 const createDataClassFromHelper = (object) => {
   let res = "data class J2DC(\n";
@@ -67,22 +68,27 @@ const kotlinTypeOfArray = (array, key, subTypeMap) => {
   return "List<Any?>";
 }
 
-const executeDefault = () => {
-   try {
-      createDataClassFromHelper(JSON.parse(cp.paste()));
-    } catch (e) {
-      console.log("Invalid JSON data");
-    }
+const executeDefaultFlow = () => {
+    const inputObj = jsonParse(cp.paste());
+    createDataClassFromHelper(inputObj);
+}
+
+const executeFlagBasedFlow = () => {
+  if(process.argv.includes('-i')) {
+    const tmpFilePath = '/tmp/j2dc_file.json';
+    require('child_process').spawnSync('vim', [tmpFilePath], {stdio:"inherit"});
+    const inputJson = fs.readFileSync('/tmp/j2dc_file.json', { encoding: 'utf8' });
+    fs.unlinkSync(tmpFilePath); 
+    const inputObj = jsonParse(inputJson);
+    createDataClassFromHelper(inputObj);
+  }
 }
 
 const execute = () => {
   if (process.argv.length === 2) {
-    executeDefault();
-  } else if(process.argv[2]) {
-    switch(process.argv[2]) {
-      case '-i' : createDataClassFromHelper(obj); break;
-      default: console.log("Invalid flag"); 
-    }
+    executeDefaultFlow();
+  } else if(process.argv.length > 2) {
+    executeFlagBasedFlow();
   }
 }
 

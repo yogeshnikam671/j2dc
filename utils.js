@@ -1,3 +1,4 @@
+const process = require('process');
 
 const isSameTypeArray = (array) => {
   const typeArray = array.map(elem => typeof elem);
@@ -28,9 +29,19 @@ const toNormalCase = value => {
   return firstChar + otherChars;
 }
 
+const jsonParse = data => {
+  try {
+    return JSON.parse(data);
+  } catch(e) {
+    console.log("Invalid JSON input");
+    process.exit(1);
+  }
+}
+
 module.exports = {
   isSameTypeArray,
   isObject,
-  toNormalCase
+  toNormalCase,
+  jsonParse
 }
 
