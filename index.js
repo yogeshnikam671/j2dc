@@ -2,19 +2,25 @@
 
 const { obj, obj1 } = require("./test-data.js"); // TODO - Remove this dependency once the tool is properly tested
 const { isSameTypeArray, isObject, toNormalCase, jsonParse } = require("./utils.js");
+const { jsonIgnoreProps, jsonProperty } = require("./constants.js");
 const cp = require("copy-paste");
 const fs = require("fs");
 
 const nullFlagCharacter = process.argv.includes('-n') ? "" : "?";
+const isJacksonEnabled = process.argv.includes('-j');
 
 const createDataClassFromHelper = (object) => {
-  let res = "data class J2DC(\n";
+  let res = "";
+  if(isJacksonEnabled) res += jsonIgnoreProps; 
+  res += "\ndata class J2DC(\n";
   const subTypeMap = {};
 
   res = createDataClassFrom(object, res, subTypeMap);
 
   while(Object.keys(subTypeMap).length > 0) {
     Object.keys(subTypeMap).forEach(key => {
+      if(isJacksonEnabled) res += jsonIgnoreProps; 
+      
       res += `\ndata class ${key}(\n`;
       res = createDataClassFrom(subTypeMap[key], res, subTypeMap);
       delete subTypeMap[key];
@@ -32,6 +38,7 @@ const createDataClassFrom = (object, res, subTypeMap) => {
 
   Object.keys(object).forEach(key => {
     const type = kotlinTypeOf(object[key], key, subTypeMap);
+    if(isJacksonEnabled) res += jsonProperty(key);
     res = res + `\tval ${key}: ${type}${nullFlagCharacter},\n`;
   });
 
