@@ -52,8 +52,12 @@ const kotlinTypeOf = (value, key, subTypeMap) => {
 const kotlinTypeOfObject = (object, key, subTypeMap) => {
   if(Object.keys(object).length === 0) return "Any";
   const type = toNormalCase(key);
-  subTypeMap[type] = object;
+  insertSubType(type, object, subTypeMap);
   return type;
+}
+
+const insertSubType = (type, object, subTypeMap) => {
+  subTypeMap[type] = object;
 }
 
 const kotlinTypeOfArray = (array, key, subTypeMap) => {
