@@ -13,7 +13,7 @@ A CLI tool to convert JSON object into Kotlin data class
 1. Copy the JSON you want to convert to kotlin data class to your clipboard.
 2. Run the command `j2dc` in terminal.
 3. You will see the resultant data class on terminal and the data class will also be automatically copied to your clipboard.
-4. Now you don't have explicitly copy the data class since it is already copied.
+4. Now you don't have to explicitly copy the data class since it is already copied.
 5. You can paste it in your kotlin file and use it.
 
 ## -i flag to take JSON as user input
@@ -36,7 +36,8 @@ A CLI tool to convert JSON object into Kotlin data class
 ## Misc
 
 1. This tool does not understand `Double` or `Float` data types. It will always consider any number as `Int`.
-   So in this case, you will have to manually change the data types of those fields.
+   So in a case where you require the data type to be one of those, you will have to manually change the data types of those fields.
+2. You can pass multiple flags at once : `j2dc -i -n -j`   
 
 
 # Roadmap
