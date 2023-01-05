@@ -1,6 +1,6 @@
 {
   "name": "j2dc",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Utility to convert json object to a kotlin data class",
   "main": "index.js",
   "bin": {
