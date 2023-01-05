@@ -2,7 +2,7 @@
 
 const { obj, obj1 } = require("./test-data.js"); // TODO - Remove this dependency once the tool is properly tested
 const { isSameTypeArray, isObject, toNormalCase, jsonParse } = require("./utils.js");
-const { jsonIgnoreProps, jsonProperty } = require("./constants.js");
+const { jsonIgnoreProps, jsonProperty, help } = require("./constants.js");
 const cp = require("copy-paste");
 const fs = require("fs");
 
@@ -92,17 +92,7 @@ const executeFlagBasedFlow = () => {
     createDataClassFromHelper(inputObj);
   }
   else if(process.argv.includes('--help')) {
-    console.log("------------------------------------------------------------------------------");
-    console.log("Default Behaviour:\n");
-    console.log("1. Copy the JSON to be converted to clipboard.");
-    console.log("2. Run the command j2dc.");
-    console.log("3. The resultant data class will be printed.");
-    console.log("4. The resultant data class will also be automatically copied to the clipboard.\n");
-
-    console.log("Options: ");
-    console.log("-i  : takes user input");
-    console.log("-j  : returns data class with Jackson annotations");
-    console.log("-n  : returns data class with non-nullable field types");
+    help();
   }
 }
 
