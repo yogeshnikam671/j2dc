@@ -38,7 +38,7 @@ A CLI tool to convert JSON object into Kotlin data class
 1. This tool does not understand `Double` or `Float` data types. It will always consider any number as `Int`.
    So in a case where you require the data type to be one of those, you will have to manually change the data types of those fields.
 2. You can pass multiple flags at once : `j2dc -i -n -j`   
-
+3. Pass the flag `--help` to understand how to use the tool.
 
 # Roadmap
 
