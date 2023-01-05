@@ -3,8 +3,7 @@ A CLI tool to convert JSON object into Kotlin data class
 
 
 # Installation
-
-
+To install this CLI tool, run the command `npm i -g j2dc`
 
 # Usages
 
