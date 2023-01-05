@@ -91,6 +91,9 @@ const executeFlagBasedFlow = () => {
     const inputObj = jsonParse(inputJson);
     createDataClassFromHelper(inputObj);
   }
+  else if(process.argv.includes('-n') || process.argv.includes('-j')) {
+    executeDefaultFlow();
+  }
   else if(process.argv.includes('--help')) {
     help();
   }

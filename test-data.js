@@ -6,7 +6,7 @@ const obj = {
   "d": ["something", "else"],
   "e": { },
   "f": {
-    "f1": "hello",
+    "f1": "hello"
    },
   "g": {
     "g1": { "random": 10 },
