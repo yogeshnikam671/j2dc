@@ -39,6 +39,13 @@ To install this CLI tool, run the command `npm i -g j2dc`
 2. You can pass multiple flags at once : `j2dc -i -n -j`   
 3. Pass the flag `--help` to understand how to use the tool.
 
+# Troubleshooting
+
+1. If you are getting the error `env: /usr/local/bin/node: No such file or directory`.
+   - Run `which node`. This shows the node executable path in your machine.
+   - Run `sudo cp <node_executable_path_in_your_machine> /usr/local/bin/node`. (temporary solution)
+   - Now, run j2dc again. It should solve the issue.
+
 # Roadmap
 
 1. Add -s flag to get the output data class with keys in sorted manner.
